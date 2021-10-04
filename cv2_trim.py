@@ -11,7 +11,12 @@ save_name = args[2]
 
 # INPUTDIR = "D:\\ipad_data\\ply_0911\\png_datas"
 INPUTDIR = Path(PLYdir_path, "png_datas")
-OUTPUTDIR = Path(".\\trimmed_images",save_name)
+OUTPUTDIR = Path(PLYdir_path, "trimmed_images")
+try:
+    os.makedirs(OUTPUTDIR)
+except:
+    pass
+
 EXT = 'png'
 
 # 余白を削除する関数
