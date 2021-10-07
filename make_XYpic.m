@@ -2,7 +2,7 @@
 
 % PLYファイルの読み込み（点群取得）
 
-function make_XYpic(PLY_file_dir, side) 
+function make_XYpic(PLY_file_dir) 
 
     oldFolder = cd(PLY_file_dir)
     mkdir png_datas
@@ -17,13 +17,11 @@ function make_XYpic(PLY_file_dir, side)
         pcshow(ptCloud);
         % 表示方向の設定
         axis off
-        if side == true
-            % 矢状面測定時
-            view(-90,90)
-        else 
-            % 前額面測定時
-            view(0,90)
-        end
+        % ipad縦向き測定時
+        view(0,90)
+%         % ipad横向き測定時
+%         view(-90,90)
+        
         % 画像データとして保存
         % saveas(gcf,"img1000.png")
         exportgraphics(gcf,"png_datas\" + name + ".png")

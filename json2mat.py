@@ -51,8 +51,12 @@ def read_openpose_json(filename: str) -> List[Dict[str, Any]]:
     with open(filename, "rb") as f:
         kpt = []
         data = json.load(f)
-        for d in data['people']:
-            kpt = np.array(d['pose_keypoints_2d']).reshape((25, 3))
+        num_col = len(data['people'])
+        for i, d in enumerate(data['people']):
+            if i == 2:
+                kpt.append(np.array(d['pose_keypoints_2d']).reshape((25, 3, 2)))
+            else:
+                kpt.append(np.array(d['pose_keypoints_2d']).reshape((25, 3)))
         # assert (
         #     len(keypoints["people"]) == 1
         # ), "In all pictures, we should have only one person!"
@@ -88,9 +92,13 @@ def get_all_openpose_json_files() -> List[str]:
 
 poses = []
 for filename in tqdm(get_all_openpose_json_files()):
-    keypoints = read_openpose_json(filename)
-    poses.append({"openpose_keypoints": keypoints})
+    keypoints = read_openpose_json(filename)#kptの出力
+    print("row",len(keypoints))
+    # print("col",len(keypoints[0]))
+    # keypoints = np.array(keypoints)
+    poses.append(keypoints)
+    # print(poses.shape[0]-initial)
 
 # Save all at once
 scipy.io.savemat("openpose_map.mat", {"OpenPoseMap": OpenPoseMap})
-scipy.io.savemat("poses_" + save_name + ".mat", {"poses": poses})
+scipy.io.savemat(".\matfile2D\poses_" + save_name + ".mat", {"poses": poses})
