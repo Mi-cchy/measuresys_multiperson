@@ -1,17 +1,24 @@
-function plot3D(save_name)
-    mat_name = "3Dposes_" + save_name +".mat";
+function plot3D(result_video, save_name)
+    mat_name = "matfile3D\3Dposes_" + save_name +".mat";
     load(mat_name)
 
-    v = VideoWriter('result_video\'+ save_name + '.avi');
+    v = VideoWriter(result_video +"\" + save_name + '.avi');
     v.FrameRate = 60;
     open(v)
 
-    for i = 1:size(poses3d,2)
+    for i = 1:size(poses3d,1)
         i
 
         color = linspace(1,10,25);
         try
-            scatter3(poses3d(i).joint_position(:,1), poses3d(i).joint_position(:,2), poses3d(i).joint_position(:,3), 30, color)
+            scatter3(poses3d{i,1}(:,1), poses3d{i,1}(:,2), poses3d{i,1}(:,3), 30, color)
+            hold on
+            if isempty(poses3d{i,2}) == 0
+                scatter3(poses3d{i,2}(:,1), poses3d{i,2}(:,2), poses3d{i,2}(:,3), 30, color) 
+            end
+            hold off            
+
+%             scatter3(poses3d(i).joint_position(:,1), poses3d(i).joint_position(:,2), poses3d(i).joint_position(:,3), 30, color)
 %         plot3(poses3d(i).joint_position(:,1), poses3d(i).joint_position(:,2), poses3d(i).joint_position(:,3), 30, color)
         catch
             % 空白のフレームを挟みたい
