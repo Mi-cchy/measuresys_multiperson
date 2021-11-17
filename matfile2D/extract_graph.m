@@ -73,4 +73,4 @@ lgd.NumColumns = 2;
 % 
 % sheet_name = ["Rhip","Rknee","Rankle","Lhip","Lknee","Lankle"];
 % 
-saveas(gcf,"roujin6_openpose_prob",'svg')
+saveas(gcf,"roujin1_front_openpose_prob",'svg')

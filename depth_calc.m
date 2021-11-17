@@ -20,6 +20,14 @@ function depth_calc(PLY_file_dir, save_name)
 
     oldFolder = cd(PLY_file_dir)
     ply_list = dir('*.ply');
+    
+    load("D:\KWAP_true_old\ipad\camparam1030.mat")
+    rotv1 = cameraParams.RotationVectors(end,:);
+    rotv1(2) = -rotv1(2);
+    rotv1 = [0.04 rotv1(2) 0.04];
+    rot1 = rotationVectorToMatrix(rotv1);
+    trans1 = [0 0 0];
+    tform1 = rigid3d(rot1,trans1);
 
     for i = 1:length(ply_list)
         i
@@ -29,10 +37,10 @@ function depth_calc(PLY_file_dir, save_name)
             ptCloud = pcdenoise(ptCloud);
             
             % ここから追加ーーーーーーーーーーーーーーーーーーーーー
-            rotv1 = [0.04 0 0.04];
-            rot1 = rotationVectorToMatrix(rotv1);
-            trans1 = [0 0 0];
-            tform1 = rigid3d(rot1,trans1);
+%             rotv1 = [0.04 0 0.04];
+%             rot1 = rotationVectorToMatrix(rotv1);
+%             trans1 = [0 0 0];
+%             tform1 = rigid3d(rot1,trans1);
             ptCloud = pctransform(ptCloud, tform1);
             % ここまでーーーーーーーーーーーーーーーーーーーーーーー
             

@@ -8,7 +8,15 @@ function make_XYpic(PLY_file_dir)
     mkdir png_datas
     list = dir('*.ply')
     % disp(list(1))
-
+    
+    load("D:\KWAP_true_old\ipad\camparam1030.mat")
+    rotv1 = cameraParams.RotationVectors(end,:);
+    rotv1(2) = -rotv1(2);
+    rotv1 = [0.04 rotv1(2) 0.04];
+    rot1 = rotationVectorToMatrix(rotv1);
+    trans1 = [0 0 0];
+    tform1 = rigid3d(rot1,trans1);
+        
     for i = 1:length(list)
         i
         [filepath,name,ext] = fileparts(list(i).name);
@@ -18,11 +26,11 @@ function make_XYpic(PLY_file_dir)
         % 以下10/30白ipad用のパラメータ
         % %% 座標変換
 %         load("D:\KWAP_true_old\ipad\camparam1030.mat")
-%         trans1 = cameraParams.TranslationVectors(end,:)/1000
-%         trans1(1) = -trans1(1) - 0.045 ;
+% %         trans1 = cameraParams.TranslationVectors(end,:)/1000
+% %         trans1(1) = -trans1(1) - 0.045 ;
 %         rotv1 = cameraParams.RotationVectors(end,:);
-%         % rotv1(1) = -rotv1(1);
-%         % rotv1(2) = -rotv1(2);
+% %         % rotv1(1) = -rotv1(1);
+%         rotv1(2) = -rotv1(2);
 % 
 % 
 %         rotv1(1) = 0;
@@ -37,10 +45,6 @@ function make_XYpic(PLY_file_dir)
         % rotv1 = [0.20898 4.02171 -0.15374];
         % rotv1 = [0.0518552, 0.997926, -0.0381482];
 
-        rotv1 = [0.04 0 0.04];
-        rot1 = rotationVectorToMatrix(rotv1);
-        trans1 = [0 0 0];
-        tform1 = rigid3d(rot1,trans1);
         ptCloud = pctransform(ptCloud, tform1);
 
         % ここまで

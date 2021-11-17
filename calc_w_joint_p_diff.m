@@ -20,18 +20,17 @@ rotv1(3) = 0;
 rot1 = rotationVectorToMatrix(rotv1);
 tform1 = rigid3d(rot1,trans1);
 
-
-side = 0;
-id = 1;
-save_name = "1030_roujin1";
+id = 8;
+save_name = "1030_roujin8_front";
 mkdir("graph\"+ save_name)
 
-% function plot3D_multi(save_name, side)
+
 %     mat_name = "3Dposes_" + save_name +".mat";
 %     load(mat_name)
 %     poses_list = [];
-load("C:\Users\mitsuhiro\Documents\measuresys_multiperson\matfile3D\3Dposes_ipad_camfront_2021-10-30--11-41-53.mat") % 前のカメラ
-sheet = readtable("D:\KWAP_true_old\GaitRite\sensor-20211030-roujin1.xls");
+load("C:\Users\mitsuhiro\Documents\measuresys_multiperson\matfile3D\3Dposes_ipad_camfront_2021-10-30--14-55-47.mat") % 前のカメラ
+% load("C:\Users\mitsuhiro\Documents\measuresys_multiperson\matfile3D\3Dposes_ipad_2021-10-30--14-55-47.mat")
+sheet = readtable("D:\KWAP_true_old\GaitRite\sensor-20211030-roujin8.xls");
 
 
     for i = 1:size(poses3d,1)
@@ -39,12 +38,12 @@ sheet = readtable("D:\KWAP_true_old\GaitRite\sensor-20211030-roujin1.xls");
 %         color = linspace(1,10,25);
         try
             pt = pointCloud(poses3d{i,1});
-            pt = pctransform(pt, tform1);
+%             pt = pctransform(pt, tform1);
             Wposes{i,1} = pt.Location;        
             
             if isempty(poses3d{i,2}) == 0
                 pt = pointCloud(poses3d{i,2})
-                pt = pctransform(pt, tform1);
+%                 pt = pctransform(pt, tform1);
                 Wposes{i,2} = pt.Location            
             end
 
