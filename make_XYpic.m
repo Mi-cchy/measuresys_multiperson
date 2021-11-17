@@ -14,6 +14,38 @@ function make_XYpic(PLY_file_dir)
         [filepath,name,ext] = fileparts(list(i).name);
         ptCloud = pcread(list(i).name);
         ptCloud = pcdenoise(ptCloud);
+        
+        % 以下10/30白ipad用のパラメータ
+        % %% 座標変換
+%         load("D:\KWAP_true_old\ipad\camparam1030.mat")
+%         trans1 = cameraParams.TranslationVectors(end,:)/1000
+%         trans1(1) = -trans1(1) - 0.045 ;
+%         rotv1 = cameraParams.RotationVectors(end,:);
+%         % rotv1(1) = -rotv1(1);
+%         % rotv1(2) = -rotv1(2);
+% 
+% 
+%         rotv1(1) = 0;
+%         rotv1(2) = -rotv1(2);
+%         rotv1(3) = 0;
+% 
+%         rot1 = rotationVectorToMatrix(rotv1);
+%         tform1 = rigid3d(rot1,trans1);
+% 
+%         ptCloud = pctransform(ptCloud, tform1);
+
+        % rotv1 = [0.20898 4.02171 -0.15374];
+        % rotv1 = [0.0518552, 0.997926, -0.0381482];
+
+        rotv1 = [0.04 0 0.04];
+        rot1 = rotationVectorToMatrix(rotv1);
+        trans1 = [0 0 0];
+        tform1 = rigid3d(rot1,trans1);
+        ptCloud = pctransform(ptCloud, tform1);
+
+        % ここまで
+        
+        
         pcshow(ptCloud);
         % 表示方向の設定
         axis off

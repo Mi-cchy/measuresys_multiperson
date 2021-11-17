@@ -1,4 +1,4 @@
-function depth_calc(PLY_file_dir, save_name)
+function depth_calc_circle(PLY_file_dir, save_name)
 
     posefile_name = '.\matfile2D\poses_' +save_name + '.mat'
     load(posefile_name)
@@ -20,59 +20,67 @@ function depth_calc(PLY_file_dir, save_name)
 
     oldFolder = cd(PLY_file_dir)
     ply_list = dir('*.ply');
-
-    for i = 1:length(ply_list)
+    i=100;
+    k=1;
+    j=11;
+%     for i = 1:length(ply_list)
         i
         if isempty(poses{1, i}) == 0
            % 関節データが含まれるのでplyを読み込む
             ptCloud = pcread(ply_list(i).name)
             ptCloud = pcdenoise(ptCloud);
             
-            % ここから追加ーーーーーーーーーーーーーーーーーーーーー
-            rotv1 = [0.04 0 0.04];
-            rot1 = rotationVectorToMatrix(rotv1);
-            trans1 = [0 0 0];
-            tform1 = rigid3d(rot1,trans1);
-            ptCloud = pctransform(ptCloud, tform1);
-            % ここまでーーーーーーーーーーーーーーーーーーーーーーー
-            
             ptCloudSize = [ptCloud.XLimits ptCloud.YLimits ptCloud.ZLimits];
             Xlength = ptCloudSize(2)-ptCloudSize(1);
             Ylength = ptCloudSize(4)-ptCloudSize(3);
             
-            for k = 1:size(poses{1,i},1)
-                for j = 1:25
-                    if  poses{1, i}(k,j,1) ~= 0
+%             for k = 1:size(poses{1,i},1)
+%                 for j = 1:25
+%                     if  poses{1, i}(k,j,1) ~= 0
                         x = poses{1, i}(k,j,1);
                         y = poses{1, i}(k,j,2);
 
-                        X = ptCloudSize(1) + x/double(imgsize(i,2))*Xlength;
-                        Y = ptCloudSize(4) - y/double(imgsize(i,1))*Ylength;
+                        X = ptCloudSize(1) + x/double(684)*Xlength;
+                        Y = ptCloudSize(4) - y/double(518)*Ylength;
 
     %                   横向きで撮影時
     %                   X = ptCloudSize(2) - y/double(imgsize(i,1))*Xlength;
     %                   Y = ptCloudSize(4) - x/double(imgsize(i,2))*Ylength;
 
-                        roi = [ X-0.01 X+0.01 Y-0.01 Y+0.01 -4 0 ];
+
+
+
+                        roi = [ X-0.1 X+0.1 Y-0.01 Y+0.01 -4 0 ];
                         indices = findPointsInROI(ptCloud,roi);
-                        ptCloudB = select(ptCloud,indices);
+                        ptCloudB = select(ptCloud,indices)
+%                         pcshow(ptCloudB);
+                        
                         % 対象領域のzの中央値をその点のz座標とする
 
-                        poses3d{i,k}(j,1) = X;
-                        poses3d{i,k}(j,2) = Y;
-                        poses3d{i,k}(j,3) = median(ptCloudB.Location(:,3));
-                    else
-                        poses3d{i,k}(j,1) = NaN;
-                        poses3d{i,k}(j,2) = NaN;
-                        poses3d{i,k}(j,3) = NaN;
-                    end
-                end
-                
-            end
+%                         poses3d{i,k}(j,1) = X;
+%                         poses3d{i,k}(j,2) = Y;
+%                         poses3d{i,k}(j,3) = median(ptCloudB.Location(:,3));
+%                     else
+%                         poses3d{i,k}(j,1) = NaN;
+%                         poses3d{i,k}(j,2) = NaN;
+%                         poses3d{i,k}(j,3) = NaN;
+%                     end
+%                 end
+%                 
+%             end
         end
-    end
+%     end
+    figure
+    pcshow(ptCloud)
+    hold on
+    pcshow(ptCloudB.Location,'r');
+    legend('Point Cloud','Points within the ROI','Location','southoutside','Color',[1 1 1])
+    hold off
+    
+    figure(2)
+    pcshow(ptCloudB.Location, 'r')
 
     cd(oldFolder)
-    out_name = append(".\matfile3D\3Dposes_", save_name, ".mat");
-    save(out_name,'poses3d')
+%     out_name = append(".\matfile3D\3Dposes_", save_name, ".mat");
+%     save(out_name,'poses3d')
 end
